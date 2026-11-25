@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>StudyHub: one home screen, three versions</title>
+<style>
+:root{--ink:#16232e;--muted:#5d6f7e;--bg:#f5f8fa;--line:#e1e8ee;--teal:#12a595;--teal2:#35c4ae;--blue:#1596a8;--iconbg:#e3f4f6;--amber:#b4620f;--amberbg:#fff3e0;--coral:#e4604f;--coralbg:#fdeceb;--okbg:#e2f6f0;--slate:#5b6f82}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);font:16px/1.5 ui-rounded,"SF Pro Rounded","Nunito","Segoe UI",system-ui,sans-serif;background:linear-gradient(160deg,#a6dbe8 0%,#62b4d4 100%);min-height:100vh}
+.top{max-width:1120px;margin:1rem auto .4rem;padding:1.3rem 1.5rem 1.2rem;color:#0c2230;background:rgba(255,255,255,.62);border-radius:26px;box-shadow:0 10px 30px rgba(10,60,90,.15)}
+.cmp{width:100%;border-collapse:separate;border-spacing:0;margin:.9rem 0 .2rem;background:#fff;border-radius:18px;overflow:hidden;font-size:.93rem;box-shadow:0 2px 10px rgba(20,60,80,.08)}
+.cmp th,.cmp td{padding:.5rem .8rem;text-align:left;border-bottom:1px solid var(--line)}
+.cmp tr:last-child td{border-bottom:0}
+.cmp thead th{color:#fff;font-weight:800;background:var(--c)}
+.cmp thead th:first-child{background:#fff}
+.cmp td:first-child{font-weight:700}
+.z{color:#5b6f82;font-weight:700}.y{color:#0b7a6d;font-weight:700}.n{color:#b8362a;font-weight:700}.m{color:#8a5a12;font-weight:700}
+.vtabs{display:none;gap:.5rem;padding:.5rem 1rem .6rem;max-width:none;margin:0;position:sticky;top:0;z-index:10;backdrop-filter:blur(8px);background:rgba(150,208,226,.8)}.vtabs button{max-width:200px}
+.vtabs button{flex:1;font:inherit;font-weight:800;cursor:pointer;border:2px solid #fff;background:rgba(255,255,255,.55);color:var(--ink);border-radius:16px;padding:.5rem .3rem;line-height:1.2}
+.vtabs button small{display:block;font-weight:600;font-size:.72rem;color:var(--muted)}
+.vtabs button.on{background:#fff;border-color:var(--c);box-shadow:0 4px 12px rgba(10,60,90,.2)}
+.hico{position:absolute;right:1rem;top:.9rem;width:3rem;height:3rem;border-radius:50%;background:rgba(255,255,255,.22);display:grid;place-items:center;color:#fff}
+.hico svg{width:1.6rem;height:1.6rem}
+@media(min-width:1500px){.phone{zoom:1}.col{width:400px}.top{max-width:1300px}}
+@media(max-width:1099px){.vtabs{display:flex}.col{display:none}.col.active{display:block}.cols{padding-top:.2rem}.cmp{font-size:.8rem}.cmp th,.cmp td{padding:.4rem .5rem}.top h1{font-size:1.45rem}}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}}
+.top h1{margin:0;font-size:1.8rem;font-weight:800;line-height:1.2}
+.top p{margin:.4rem 0 .8rem;max-width:46rem}
+.top .row{display:flex;gap:.8rem;flex-wrap:wrap;align-items:center}
+.btn{font:inherit;font-weight:700;cursor:pointer;border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:99px;padding:.4rem 1.2rem}
+.how{background:rgba(255,255,255,.7);border-radius:14px;padding:.4rem .9rem;font-size:.92rem}
+.cols{display:flex;flex-wrap:wrap;gap:1.6rem;justify-content:center;align-items:flex-start;padding:1rem 1rem 2.5rem}
+.col{width:352px;max-width:100%}
+@media(prefers-reduced-motion:no-preference){.col{animation:rise .4s ease-out backwards}.col:nth-child(2){animation-delay:.08s}.col:nth-child(3){animation-delay:.16s}}
+.vhead{background:#fff;border-radius:22px;border-top:8px solid var(--c);padding:.9rem 1.1rem 1rem;box-shadow:0 10px 30px rgba(10,60,90,.18);min-height:9.2rem}
+.chip{display:inline-block;background:var(--c);color:#fff;font-weight:800;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;border-radius:99px;padding:.1rem .8rem}
+.vhead h2{margin:.35rem 0 .1rem;font-size:1.45rem;font-weight:800;line-height:1.2}
+.vhead p{margin:0;color:var(--muted);font-size:.95rem}
+.obs{background:rgba(255,255,255,.92);border-radius:16px;padding:.6rem .9rem;margin-top:.8rem;font-size:.9rem}
+.obs h3{margin:0 0 .15rem;font-size:.85rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.obs ul{margin:0;padding-left:1.1rem}.obs li{margin:.1rem 0}.obs li:first-child{font-weight:700}
+.obs details{font-size:.85rem}
+.obs pre{background:var(--ink);color:#e6edf2;padding:.6rem;border-radius:8px;font-size:.7rem;max-height:9rem;overflow:auto;white-space:pre-wrap}
+.hint{color:var(--muted);font-size:.88rem}
+/* phone */
+.phone{zoom:.88;position:relative;width:392px;min-height:820px;margin-top:1rem;background:var(--bg);border-radius:52px;border:10px solid #101418;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 18px 50px rgba(5,40,70,.35)}
+.island{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:112px;height:32px;background:#101418;border-radius:20px;z-index:2}
+.status{display:flex;justify-content:space-between;align-items:center;padding:.85rem 1.7rem .2rem;font-weight:700;font-size:.95rem;height:3rem}
+.status svg{height:.9rem;margin-left:.3rem;vertical-align:middle}
+.apptop{display:flex;justify-content:space-between;align-items:center;padding:.4rem 1.3rem .6rem}
+.apptop small{color:var(--muted);display:block;line-height:1.1}
+.apptop h1{margin:0;font-size:1.85rem;line-height:1.15;font-weight:800;letter-spacing:-.01em}
+.ic{display:flex;gap:.7rem;align-items:center}
+.bell{position:relative;width:1.5rem;height:1.5rem}
+.av{width:2.4rem;height:2.4rem;border-radius:50%;background:linear-gradient(135deg,var(--teal2),var(--blue));color:#fff;display:grid;place-items:center;font-weight:800}
+.screen{padding:0 1.1rem 1rem;flex:1}
+.hero{position:relative;background:linear-gradient(135deg,var(--teal) 0%,var(--teal2) 100%);color:#fff;border-radius:22px;padding:.9rem 1.1rem 1rem;box-shadow:0 6px 16px rgba(18,165,149,.3)}
+.hl{font-size:.85rem;opacity:.9;font-weight:600}
+.ht{font-size:1.55rem;font-weight:800;line-height:1.2;margin:.1rem 0}
+.hs{font-size:.92rem;opacity:.95}
+.seg{display:flex;gap:.3rem;margin-top:.7rem}
+.seg span{flex:1;height:6px;border-radius:99px;background:rgba(255,255,255,.35)}
+.seg span.on{background:#fff}
+.msg{min-height:2.5rem;margin:.6rem 0 .3rem;display:flex;align-items:center}
+.msg span{display:inline-block;border-radius:99px;padding:.3rem .9rem;font-size:.92rem;font-weight:700}
+.msg .ok{background:var(--okbg);color:#0b7a6d}.msg .no{background:var(--coralbg);color:#b8362a}
+.sec{font-size:1.05rem;font-weight:800;margin:.5rem 0 .5rem}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.tile{position:relative;font:inherit;cursor:pointer;background:#fff;border:0;border-radius:22px;padding:1rem .5rem .9rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;color:var(--ink);box-shadow:0 2px 10px rgba(20,60,80,.08);transition:transform .1s}
+.tile:active{transform:scale(.97)}
+.tile .ico{width:3.3rem;height:3.3rem;border-radius:50%;background:var(--iconbg);color:var(--blue);display:grid;place-items:center}
+.tile .ico svg{width:1.7rem;height:1.7rem}
+.tile span.l{font-weight:700;font-size:.95rem}
+.badge{position:absolute;top:.55rem;right:.6rem;background:var(--teal);color:#fff;font-size:.68rem;font-weight:800;border-radius:99px;padding:.05rem .55rem;font-style:normal}
+.sug{background:var(--amberbg);border-radius:22px;padding:.9rem 1.1rem;margin:.2rem 0 .8rem;border:2px solid #f3cf99}
+.sug .tag{font-size:.76rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--amber)}
+.sug .big{font-size:1.15rem;font-weight:800;margin:.2rem 0}
+.sug p{margin:.2rem 0}.sug .why{color:#7a5424;font-size:.92rem}
+.pill{font:inherit;font-weight:700;cursor:pointer;border:2px solid var(--ink);background:#fff;border-radius:99px;padding:.4rem 1.3rem;margin:.6rem .5rem 0 0;color:var(--ink)}
+.pill.go{background:linear-gradient(135deg,var(--teal),var(--teal2));border-color:transparent;color:#fff}
+.chg{background:#fff;border-radius:22px;padding:.8rem 1.1rem;margin-top:.9rem;box-shadow:0 2px 10px rgba(20,60,80,.08)}
+.chg h3{font-size:1rem;margin:0 0 .2rem;font-weight:800}.chg p{margin:.2rem 0;font-size:.92rem}
+.chg .pill{margin:.4rem 0 0;padding:.2rem 1rem;font-size:.9rem}
+.card{background:#fff;border-radius:22px;padding:1rem 1.1rem;margin:.7rem 0;box-shadow:0 2px 10px rgba(20,60,80,.08)}
+.card h3{font-size:1.1rem;margin:0 0 .3rem;font-weight:800}
+.intro h2{font-size:1.6rem;font-weight:800;margin:.2rem 0 .1rem}
+.step{display:flex;gap:.8rem;align-items:flex-start;background:#fff;border-radius:20px;padding:.8rem 1rem;margin:.65rem 0;box-shadow:0 2px 10px rgba(20,60,80,.08)}
+.step i{flex:none;width:2.2rem;height:2.2rem;border-radius:50%;background:var(--iconbg);color:var(--blue);display:grid;place-items:center;font:800 1rem system-ui;font-style:normal}
+.note{background:var(--okbg);border-radius:16px;padding:.7rem 1rem;font-size:.93rem;margin:.7rem 0;color:#0b6a5e}
+.rate{margin:.9rem 0}.rate p{margin:0 0 .35rem;font-size:.96rem;font-weight:700}
+.rate .row{display:flex;gap:.4rem}
+.rate .ends{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-top:.25rem;max-width:14rem}
+.rate button{width:2.6rem;height:2.6rem;border-radius:50%;border:2px solid var(--line);background:#fff;font:700 1rem system-ui;cursor:pointer;color:var(--ink)}
+.rate button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.main{display:block;width:100%;background:linear-gradient(135deg,var(--teal),var(--teal2));color:#fff;border:0;border-radius:99px;padding:.85rem;font-family:inherit;font-weight:800;font-size:1.05rem;cursor:pointer;margin-top:.9rem;box-shadow:0 6px 16px rgba(18,165,149,.3)}
+.main:disabled{opacity:.4;cursor:default;box-shadow:none}
+.tabs{display:flex;justify-content:space-around;background:#fff;border-top:1px solid var(--line);padding:.55rem 0 1.1rem;pointer-events:none}
+.tabs div{display:flex;flex-direction:column;align-items:center;font-size:.72rem;font-weight:600;color:#8a99a6}
+.tabs div.on{color:var(--blue)}
+.tabs svg{width:1.45rem;height:1.45rem}
+button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+@media(prefers-reduced-motion:no-preference){.sug,.chg{animation:in .25s ease-out}@keyframes in{from{opacity:0;transform:translateY(6px)}}}
+</style>
+</head>
+<body>
+<div class="top">
+  <h1>StudyHub: one home screen, three versions</h1>
+  <p>Each phone below is the same app with the same six tasks. They differ in one thing only: <b>how the home screen changes while you use it</b>. Press Start on each phone, do the tasks, and compare what happens after the second Notes task.</p>
+  <table class="cmp" id="cmp"><thead><tr><th></th><th style="--c:#5b6f82">A. Stable</th><th style="--c:#e4604f">B. Automatic</th><th style="--c:#12a595">C. Suggested</th></tr></thead><tbody>
+<tr><td>Changes the layout</td><td class="z">Never</td><td class="m">By itself</td><td class="m">Only if you accept</td></tr>
+<tr><td>Asks before changing</td><td class="z">No</td><td class="n">&#10005; No</td><td class="y">&#10003; Yes</td></tr>
+<tr><td>Explains why</td><td class="z">No</td><td class="n">&#10005; No</td><td class="y">&#10003; Yes</td></tr>
+<tr><td>You can undo it</td><td class="z">Nothing to undo</td><td class="n">&#10005; No</td><td class="y">&#10003; Yes</td></tr></tbody></table>
+<div class="row" style="margin-top:.8rem"><button class="btn" id="resetAll">Restart all three</button><span class="how">Tip: the box under each phone explains in plain words what just happened.</span></div>
+</div>
+<div class="vtabs" id="vtabs" role="tablist"></div>
+<div class="cols" id="cols"></div>
+<script>
+const IC={
+ timetable:'<rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M8 3v4M16 3v4M3.5 10h17"/>',
+ library:'<path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/>',
+ notes:'<path d="M6 3h9l4 4v14H6z"/><path d="M9 12h7M9 16h5"/>',
+ messages:'<path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v9a1.5 1.5 0 0 1-1.5 1.5H10l-4 4v-4H5.5A1.5 1.5 0 0 1 4 14.5z"/>',
+ grades:'<path d="M5 20V11M12 20V4M19 20v-6"/>',
+ maps:'<path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+ cafe:'<path d="M5 8h11v6a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z"/><path d="M16 9h2a2.5 2.5 0 0 1 0 5h-2M8 3v2M12 3v2"/>',
+ settings:'<path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>'
+};
+const T={timetable:'Timetable',library:'Library',notes:'Notes',messages:'Messages',grades:'Grades',maps:'Maps',cafe:'Cafe menu',settings:'Settings'};
+const START=['timetable','library','notes','messages','grades','maps','cafe','settings'];
+const TASKS=['notes','timetable','notes','library','notes','timetable'];
+const VERS={
+ stable:{chip:'Version A',name:'Stable',desc:'The interface does not change.',color:'#5b6f82',
+   watch:['Nothing moves in this version.','Notes is used three times, but the tiles stay put.','Wrong taps should be rare.']},
+ auto:{chip:'Version B',name:'Automatic',desc:'The interface personalises itself automatically, without asking the user.',color:'#e4604f',
+   watch:['After the second Notes task, Notes jumps to the top. There is no message.','The next task asks for Library, which has shifted.','Watch whether the tester taps the old Library position.']},
+ transparent:{chip:'Version C',name:'Suggested',desc:'The app suggests changes and explains why. You accept, reject or undo each one.',color:'#12a595',
+   watch:['After the second Notes task, a card asks before changing anything.','The card says what it will do and why.','Try Accept, then Undo. Restart and try Reject.']}
+};
+const R=[['r1','I could predict where things would be'],['r2','I felt in control of changes to the screen'],['r3','I trusted that the changes were right for me']];
+const ord=n=>['first','second','third'][n-1]||n+'th';
+const svg=id=>'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+IC[id]+'</svg>';
+const PHONE='<div class="phone"><div class="island"></div><div class="status"><span>9:41</span><span><svg viewBox="0 0 18 12" fill="#16232e"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" fill="none" stroke="#16232e" stroke-width="2" stroke-linecap="round"><path d="M1 4.5a10 10 0 0 1 14 0M3.5 7.2a6.3 6.3 0 0 1 9 0"/><circle cx="8" cy="10" r="1" fill="#16232e"/></svg><svg viewBox="0 0 26 12" fill="none"><rect x=".5" y=".5" width="22" height="11" rx="3" stroke="#16232e" opacity=".5"/><rect x="2" y="2" width="17" height="8" rx="2" fill="#16232e"/><rect x="24" y="4" width="2" height="4" rx="1" fill="#16232e" opacity=".5"/></svg></span></div>'+
+ '<div class="apptop"><div><small>Good morning</small><h1>StudyHub</h1></div><div class="ic"><svg class="bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 17V11a6 6 0 0 1 12 0v6l1.5 2h-15zM10 21h4"/></svg><div class="av">S</div></div></div>'+
+ '<div class="screen" aria-live="polite"></div><nav class="tabs" aria-hidden="true"><div class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v9H4z"/></svg>Home</div><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4 10-10"/></svg>Tasks</div><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Profile</div></nav></div>';
+const apps=[];
+function makeApp(cond,root){
+  const q=s=>root.querySelector(s);
+  let started,order,ti,uses,misses,msg,pend,changes,rej,log,ev,ctrl,acc,rejc,undos,done,rt,saved,changed;
+  function init(){started=false;order=START.slice();ti=0;uses={};misses=0;msg=null;pend=null;changes=[];rej={};log=[];ev=[];ctrl=0;acc=0;rejc=0;undos=0;done=false;rt={};saved=false;changed=false;note('Session started, version: '+cond);render();}
+  function note(m){log.unshift(new Date().toLocaleTimeString()+'  '+m);}
+  function say(m){ev.unshift(m);ev=ev.slice(0,4);}
+  function ctl(){ctrl++;if(ctrl===1)note('First control action (tipping-point marker)');}
+  const moved=id=>changes.some(c=>c.id===id&&!c.undone);
+  function move(id,how){const from=order.indexOf(id);order.splice(from,1);order.unshift(id);changes.push({id,from,how,undone:false});changed=true;note('ADAPT: '+T[id]+' moved to top ('+how+')');}
+  function tap(id){
+    if(done||!started)return;const want=TASKS[ti];
+    if(id===want){
+      uses[id]=(uses[id]||0)+1;msg={ok:true,t:'Opened '+T[id]};ti++;note('Task '+ti+' done: opened '+T[id]);
+      say('Tester opened '+T[id]+' (the '+ord(uses[id])+' time).');
+      if(uses[id]===2&&cond==='stable')say('Notes has been used twice. This version never changes the layout.');
+      if(uses[id]>=2&&!moved(id)&&!rej[id]){
+        if(cond==='auto'){move(id,'automatic');say('The app moved '+T[id]+' to the top by itself, with no message.');}
+        else if(cond==='transparent'&&!pend){pend=id;note('SUGGEST: move '+T[id]+' to top, shown with reason');say('The app suggested moving '+T[id]+' to the top and gave a reason.');}
+      }
+      if(ti>=TASKS.length){done=true;note('All tasks finished');say('All six tasks finished.');}
+    }else{
+      misses++;msg={ok:false,t:'Not that one. You tapped '+T[id]+'. Look for '+T[want]+'.'};
+      note('MISS: tapped '+T[id]+', wanted '+T[want]+(changed?' (after a layout change)':''));
+      say('Wrong tap: tester pressed '+T[id]+' but needed '+T[want]+(changed?'. The layout had changed earlier.':'.'));
+    }
+    render();
+  }
+  function accept(){const id=pend;pend=null;acc++;ctl();note('Student accepted the suggestion');move(id,'accepted');msg={ok:true,t:'Done. '+T[id]+' is now at the top.'};say('Tester accepted. '+T[id]+' moved to the top.');render();}
+  function reject(){const id=pend;pend=null;rej[id]=true;rejc++;ctl();note('Student rejected the suggestion for '+T[id]);msg={ok:true,t:'OK. Nothing has changed.'};say('Tester rejected the suggestion. The layout stays the same.');render();}
+  function undo(id){const c=changes.find(x=>x.id===id&&!x.undone);if(!c)return;order.splice(order.indexOf(id),1);order.splice(c.from,0,id);c.undone=true;rej[id]=true;undos++;ctl();note('Student undid the move of '+T[id]);msg={ok:true,t:'Undone. '+T[id]+' is back where it was.'};say('Tester undid the move. '+T[id]+' went back.');render();}
+  function phone(){
+    if(!started)return '<div class="intro"><h2>Welcome</h2><p class="hint" style="margin:0">Your home screen for study apps.</p>'+
+      '<div class="step"><i>1</i><div><b>You get 6 short tasks</b><br>Each one asks you to open an app.</div></div>'+
+      '<div class="step"><i>2</i><div><b>Tap the matching tile</b><br>Find the app on the screen and tap it.</div></div>'+
+      '<div class="step"><i>3</i><div><b>Then tell us how it felt</b><br>Three quick questions at the end.</div></div>'+
+      '<div class="note">The home screen may change while you use it. This is part of the test.</div>'+
+      '<button class="main" data-start="1">Start</button></div>';
+    if(done){
+      const all=R.every(r=>rt[r[0]]);
+      return '<div class="card"><h3>Tasks finished. Thank you!</h3><p class="hint" style="margin:0">Now tell us how it felt.</p></div>'+
+        (saved?'<div class="card"><b>Your answers are saved.</b></div>':R.map(r=>'<div class="rate"><p>'+r[1]+'</p><div class="row">'+[1,2,3,4,5].map(n=>'<button data-r="'+r[0]+'" data-v="'+n+'" class="'+(rt[r[0]]===n?'on':'')+'" aria-label="'+r[1]+': '+n+'">'+n+'</button>').join('')+'</div><div class="ends"><span>Disagree</span><span>Agree</span></div></div>').join('')+'<button class="main" data-save="1"'+(all?'':' disabled')+'>Save my answers</button>');
+    }
+    const w=T[TASKS[ti]];
+    let h='<div class="hero"><span class="hico">'+svg(TASKS[ti])+'</span><div class="hl">Your task &middot; '+(ti+1)+' of '+TASKS.length+'</div><div class="ht">Open '+w+'</div><div class="hs">Tap the '+w+' tile below</div><div class="seg">'+TASKS.map((_,k)=>'<span class="'+(k<ti?'on':'')+'"></span>').join('')+'</div></div>'+
+      '<div class="msg">'+(msg?'<span class="'+(msg.ok?'ok':'no')+'">'+(msg.ok?'&#10003; ':'')+msg.t+'</span>':'')+'</div>';
+    if(pend)h+='<div class="sug"><div class="tag">&#10024; The app suggests a change</div><p class="big">Move '+T[pend]+' to the top of your screen</p><p class="why">Why: you have opened '+T[pend]+' '+uses[pend]+' times.</p><p class="why">Only the order of the tiles changes. You can undo it later.</p><button class="pill go" data-act="accept">Accept</button><button class="pill" data-act="reject">Reject</button></div>';
+    h+='<div class="sec">My apps</div><div class="grid">'+order.map(id=>'<button class="tile" data-id="'+id+'">'+(cond==='transparent'&&moved(id)?'<em class="badge">Moved</em>':'')+'<span class="ico">'+svg(id)+'</span><span class="l">'+T[id]+'</span></button>').join('')+'</div>';
+    const act=changes.filter(c=>!c.undone);
+    if(cond==='transparent'&&act.length)h+='<div class="chg"><h3>Changes to your layout</h3>'+act.map(c=>'<p>'+T[c.id]+' was moved to the top (you accepted).<br><button class="pill" data-undo="'+c.id+'">Undo</button></p>').join('')+'</div>';
+    return h;
+  }
+  function render(){
+    q('.screen').innerHTML=phone();
+    q('.events').innerHTML=ev.length?ev.map(x=>'<li>'+x+'</li>').join(''):'<li style="font-weight:400">Nothing yet. Press Start on the phone.</li>';
+    q('.results').innerHTML=done?'Wrong taps: <b>'+misses+'</b>. Layout changes: <b>'+changes.length+'</b> (accepted '+acc+', rejected '+rejc+', undone '+undos+').'+(saved?'<br>Ratings: predict <b>'+rt.r1+'</b>, control <b>'+rt.r2+'</b>, trust <b>'+rt.r3+'</b>.':'<br><span class="hint">Waiting for the tester\'s ratings.</span>'):'<span class="hint">Shown when the tester finishes.</span>';
+    q('.logtxt').textContent=log.join('\n');
+  }
+  root.addEventListener('click',e=>{
+    const b=e.target.closest('button');if(!b)return;const d=b.dataset;
+    if(d.id)tap(d.id);
+    else if(d.start){started=true;note('Tester pressed Start');say('Tester pressed Start.');render();}
+    else if(d.act==='accept')accept();
+    else if(d.act==='reject')reject();
+    else if(d.undo)undo(d.undo);
+    else if(d.r){rt[d.r]=+d.v;render();}
+    else if(d.save){note('RATINGS predictability='+rt.r1+', control='+rt.r2+', trust='+rt.r3+', wrong taps='+misses+', changes='+changes.length+', accepted='+acc+', rejected='+rejc+', undone='+undos);saved=true;render();}
+  });
+  init();
+  return {init};
+}
+const cols=document.getElementById('cols');
+Object.keys(VERS).forEach(k=>{
+  const v=VERS[k],s=document.createElement('section');
+  s.className='col';s.id='col-'+k;s.style.setProperty('--c',v.color);
+  s.innerHTML='<div class="vhead"><span class="chip">'+v.chip+'</span><h2>'+v.name+'</h2><p>'+v.desc+'</p></div>'+PHONE+
+    '<div class="obs"><h3>What to watch for</h3><ul>'+v.watch.map(x=>'<li>'+x+'</li>').join('')+'</ul></div>'+
+    '<div class="obs"><h3>What just happened</h3><ul class="events"></ul></div>'+
+    '<div class="obs"><h3>Results</h3><div class="results"></div><details><summary>Raw session record</summary><pre class="logtxt"></pre></details></div>';
+  cols.appendChild(s);apps.push(makeApp(k,s));
+});
+const vt=document.getElementById('vtabs');
+Object.keys(VERS).forEach((k,i)=>{const v=VERS[k],b=document.createElement('button');b.dataset.v=k;b.style.setProperty('--c',v.color);b.innerHTML=v.chip.replace('Version ','')+'. '+v.name;b.setAttribute('role','tab');vt.appendChild(b);});
+function showV(k){vt.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v===k));document.querySelectorAll('.col').forEach(c=>c.classList.toggle('active',c.id==='col-'+k));}
+vt.addEventListener('click',e=>{const b=e.target.closest('button');if(b)showV(b.dataset.v);});
+showV('stable');
+document.getElementById('resetAll').addEventListener('click',()=>apps.forEach(a=>a.init()));
+</script>
+</body>
+</html>

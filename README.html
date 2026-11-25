@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StudyHub: Personalisation vs Predictability in an Adaptive Home Screen</title>
+<style>
+:root {
+  --ink: #16232e;
+  --muted: #5d6f7e;
+  --bg: #f6f9fb;
+  --card: #ffffff;
+  --line: #dce5ec;
+  --accent: #12a595;
+  --code-bg: #f0f4f8;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 2rem 1rem 3.5rem;
+  color: var(--ink);
+  background: var(--bg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+}
+main {
+  max-width: 920px;
+  margin: 0 auto;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 2.2rem 2.5rem;
+  box-shadow: 0 6px 24px rgba(16, 35, 46, 0.06);
+}
+h1, h2 {
+  line-height: 1.25;
+  color: #0e1a24;
+}
+h1 {
+  margin-top: 0;
+  font-size: 1.95rem;
+  border-bottom: 2px solid var(--line);
+  padding-bottom: 0.6rem;
+}
+h2 {
+  margin-top: 2rem;
+  font-size: 1.35rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--line);
+}
+p {
+  margin: 0.75rem 0;
+}
+ul, ol {
+  margin: 0.6rem 0 1rem;
+  padding-left: 1.5rem;
+}
+li {
+  margin: 0.35rem 0;
+}
+hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 1.75rem 0;
+}
+a {
+  color: #0c7c70;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+  background: var(--code-bg);
+  padding: 0.15em 0.35em;
+  border-radius: 4px;
+}
+pre {
+  background: #16232e;
+  color: #edf3f7;
+  padding: 0.9rem 1.1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 0.9rem 0;
+}
+pre code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font-size: 0.9rem;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.95rem;
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--line);
+}
+thead th {
+  background: #eef4f7;
+  font-weight: 700;
+}
+tbody tr:nth-child(even) {
+  background: #fafcfd;
+}
+.meta {
+  color: var(--ink);
+  background: #f3f8fa;
+  border-left: 4px solid var(--accent);
+  padding: 0.85rem 1rem;
+  border-radius: 6px;
+  margin: 1rem 0 1.5rem;
+}
+.note {
+  color: var(--muted);
+  font-style: italic;
+}
+@media (max-width: 640px) {
+  body {
+    padding: 0.75rem 0.5rem 2rem;
+  }
+  main {
+    padding: 1.25rem 1rem;
+    border-radius: 10px;
+  }
+  table {
+    font-size: 0.86rem;
+  }
+  th, td {
+    padding: 0.5rem;
+  }
+}
+</style>
+</head>
+<body>
+<main>
+<h1>StudyHub: Personalisation vs Predictability in an Adaptive Home Screen</h1>
+
+<div class="meta">
+  <strong>Module:</strong> Intelligent Interactive Systems (School of Computer Science, University of Birmingham)<br>
+  <strong>Student:</strong> Shravani Jagtap | <strong>Student ID:</strong> 3090270<br>
+  <strong>Project:</strong> Assignment 2 — <em>Personalisation vs Predictability: A Test Bed for Adaptive Interfaces</em> (builds on Assignment 1 literature review)<br>
+  <strong>Repository:</strong> <a href="https://github.com/shravanijagtap23-cell/Assignment-2-IIS">https://github.com/shravanijagtap23-cell/Assignment-2-IIS.git</a>
+</div>
+
+<section id="project-overview">
+  <h2>1. Project overview</h2>
+  <p>Adaptive interfaces can reduce interaction effort, yet silent layout changes often make them unpredictable and hard to control. Assignment 1 reviewed eight 2025–2026 studies on personalised systems (Adel et al. [1]; Algamdi [2]; Chai [3]; Du and Chen [4]; Eckl et al. [5]; Feng et al. [6]; Hofstede et al. [7]; Geddam et al. [8]). While those studies reported gains in efficiency, accessibility, learning, or accuracy, each left trust, understanding, predictability, usability, or user control untested. Figure 1 of Assignment 1 therefore proposed comparing three interface conditions.</p>
+  <p><strong>StudyHub</strong> implements that comparison in <code>index.html</code> as a student home screen containing eight app tiles (<code>Timetable</code>, <code>Library</code>, <code>Notes</code>, <code>Messages</code>, <code>Grades</code>, <code>Maps</code>, <code>Cafe menu</code>, <code>Settings</code>) displayed across three interactive phone frames side by side:</p>
+  <ul>
+    <li><strong>Version A — Stable:</strong> The tile layout never changes.</li>
+    <li><strong>Version B — Automatic:</strong> Once a tile is used twice, the app moves it to the top position automatically with no prompt or explanation.</li>
+    <li><strong>Version C — Suggested:</strong> Once a tile is used twice, the app displays a suggestion card explaining why and lets the student <strong>Accept</strong>, <strong>Reject</strong>, or later <strong>Undo</strong> the move.</li>
+  </ul>
+</section>
+
+<section id="design-rationale">
+  <h2>2. Design rationale</h2>
+  <p>Every mechanism in StudyHub maps directly to the Assignment 1 research gaps and HCI/AI design principles documented in <code>docs/report.md</code>:</p>
+  <ul>
+    <li><strong>Three-condition test bed (Assignment 1 Figure 1; Shneiderman, 2022):</strong> Versions A, B, and C share identical tasks and rendering code, isolating visibility and human control (aiming for high automation with high human control in Version C).</li>
+    <li><strong>Mixed-initiative interaction (Horvitz, 1999; Amershi et al., 2019 G9, G17):</strong> In Version C, the system takes initiative after two uses of a tile (<code>uses[id] &gt;= 2</code>), while the student retains final authority via <strong>Accept</strong>, <strong>Reject</strong>, and <strong>Undo</strong>, with control actions counted.</li>
+    <li><strong>Bridging the gulf of evaluation (Norman, 2013; Amershi G11; Kulesza et al., 2013; Cowan, 2001):</strong> Version B hides the cause of layout shifts, risking wrong taps and weakened agency (Haggard, 2017). Version C surfaces a single focused change and one plain-language reason (<code>Why: you have opened Notes 2 times</code>), respecting working-memory limits.</li>
+    <li><strong>Inspectable, editable, forgettable control (Lecture 10; Amershi G14; Lecture 04):</strong> Version C tags adapted tiles with a <code>Moved</code> badge, lists accepted changes under <strong>Changes to your layout</strong> with an <strong>Undo</strong> button, and remembers both <strong>Reject</strong> and <strong>Undo</strong> (<code>rej[id] = true</code>) so the system never re-suggests that tile.</li>
+    <li><strong>Expectation alignment (Luger and Sellen, 2016; Amershi G1):</strong> Version C explicitly states <em>"Only the order of the tiles changes. You can undo it later"</em>, preventing users from expecting hidden removals or content edits.</li>
+    <li><strong>Predictability, wrong-tap, and tipping-point logging (Lecture 05, Lecture 09):</strong> The prototype counts wrong taps (<code>misses</code>), marks whether a wrong tap occurred after a layout change, logs the first control action as a tipping-point marker, and collects 1–5 ratings on predictability, control, and trust.</li>
+    <li><strong>Fixed rule instead of a generative model (Lecture 02, Lecture 08, Lecture 12):</strong> Because identical LLM calls vary in wording and behaviour, StudyHub uses a deterministic rule to simulate user-preference inference so A, B, and C can be compared fairly.</li>
+  </ul>
+</section>
+
+<section id="how-the-prototype-works">
+  <h2>3. How the prototype works</h2>
+  <p>Each phone runs the same <code>makeApp(cond, root)</code> state machine inside <code>index.html</code>:</p>
+  <ol>
+    <li><strong>Welcome &amp; Start:</strong> The tester reads a 3-step intro screen and presses <strong>Start</strong>.</li>
+    <li><strong>Six tap tasks:</strong> The phone presents the fixed task sequence <code>Notes</code> → <code>Timetable</code> → <code>Notes</code> → <code>Library</code> → <code>Notes</code> → <code>Timetable</code> (<code>TASKS</code>), with a 6-segment progress bar.</li>
+    <li><strong>Adaptation trigger (after Task 3, the second <code>Notes</code> tap):</strong>
+      <ul>
+        <li><strong>Version A (Stable):</strong> <code>Notes</code> remains in its original slot; nothing shifts.</li>
+        <li><strong>Version B (Automatic):</strong> <code>Notes</code> jumps silently to the first slot, shifting <code>Timetable</code> and <code>Library</code>. On Task 4 (<code>Open Library</code>), tapping the old <code>Library</code> position triggers a wrong-tap alert (<code>"Not that one. You tapped Timetable. Look for Library."</code>).</li>
+        <li><strong>Version C (Suggested):</strong> An amber suggestion card asks <em>"Move Notes to the top of your screen"</em> with the reason and <strong>Accept</strong> / <strong>Reject</strong> buttons. Accepting moves <code>Notes</code> to slot 1, adds a <code>Moved</code> badge, and creates an <strong>Undo</strong> entry under <strong>Changes to your layout</strong>.</li>
+      </ul>
+    </li>
+    <li><strong>End-of-session ratings:</strong> After all six tasks, the user rates three statements from <code>1</code> (Disagree) to <code>5</code> (Agree):
+      <ul>
+        <li><em>"I could predict where things would be"</em></li>
+        <li><em>"I felt in control of changes to the screen"</em></li>
+        <li><em>"I trusted that the changes were right for me"</em></li>
+      </ul>
+    </li>
+    <li><strong>Observer panels &amp; session record:</strong> Beneath each phone, <strong>What to watch for</strong>, <strong>What just happened</strong>, <strong>Results</strong> (wrong taps, layout changes, accepts, rejects, undos, ratings), and an expandable <strong>Raw session record</strong> update after every click. A <strong>Restart all three</strong> button resets all three phones together.</li>
+  </ol>
+</section>
+
+<section id="implementation-status">
+  <h2>4. Implementation status</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Component / Feature</th>
+        <th>Status</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Three-version comparison UI (A, B, C)</td>
+        <td>Implemented</td>
+        <td>Shared <code>makeApp</code> engine and layout renderer in <code>index.html</code>; comparison table at top; responsive A/B/C tab bar on narrow screens (<code>&lt;= 1099px</code>).</td>
+      </tr>
+      <tr>
+        <td>Preference inference rule</td>
+        <td><strong>Simulated</strong></td>
+        <td>Deterministic rule (<code>uses[id] &gt;= 2 &amp;&amp; !moved(id) &amp;&amp; !rej[id]</code>) representing Lecture 02 sense–interpret–act inference with no external AI API call.</td>
+      </tr>
+      <tr>
+        <td>Version C suggestion &amp; controls</td>
+        <td>Implemented</td>
+        <td>Suggestion card with plain-language reason, <strong>Accept</strong>, <strong>Reject</strong>, <code>Moved</code> tile badge, and <strong>Changes to your layout</strong> <strong>Undo</strong> list.</td>
+      </tr>
+      <tr>
+        <td>Task flow, wrong-tap tracking &amp; ratings</td>
+        <td>Implemented</td>
+        <td>6 fixed tap tasks, wrong-tap feedback and post-change flagging, tipping-point marker, and 1–5 Likert ratings for predictability, control, and trust.</td>
+      </tr>
+      <tr>
+        <td>Observer panels &amp; raw session log</td>
+        <td>Implemented</td>
+        <td>Live <strong>What just happened</strong> feed, <strong>Results</strong> summary, and timestamped <strong>Raw session record</strong>.</td>
+      </tr>
+      <tr>
+        <td>Content-adaptive quiz</td>
+        <td>Planned</td>
+        <td>Deferred from an earlier prototype in favour of the clearer tile-order layout task (planned later stage, cf. Chai [3]).</td>
+      </tr>
+      <tr>
+        <td>LLM-generated reason text</td>
+        <td>Planned</td>
+        <td>Future language model would only phrase the <code>"why"</code> sentence in constrained format; application code still controls layout changes.</td>
+      </tr>
+      <tr>
+        <td>Saved preferences with expiry</td>
+        <td>Planned</td>
+        <td>Planned to address the stale-note problem (Lecture 10), where moved tiles currently stay at the top indefinitely unless undone.</td>
+      </tr>
+      <tr>
+        <td>Empirical participant study</td>
+        <td>Planned</td>
+        <td>Prototype and instrumentation are built; no participant data has been collected yet.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="technology-stack">
+  <h2>5. Technology stack</h2>
+  <ul>
+    <li><strong>Prototype (<code>index.html</code>):</strong> Single self-contained HTML5 file (236 lines) with embedded CSS3 and vanilla JavaScript plus inline SVG icons. Zero external libraries, zero build step, works fully offline, and requires no API keys.</li>
+    <li><strong>System diagram (<code>docs/system_diagram.svg</code>, <code>.png</code>):</strong> Vector flowchart and PNG export matching the implemented <code>index.html</code> states and planned extensions.</li>
+    <li><strong>Documentation &amp; report (<code>docs/</code>):</strong> Written in Markdown (<code>docs/report.md</code>) and formatted into <code>docs/Assignment2_Project_Report_FINAL.docx</code> and <code>.pdf</code> (10 pages; 1,291 words total: 228-word abstract + 1,063-word main report).</li>
+    <li><strong>Screenshots (<code>screenshots/</code>):</strong> Rendered directly from <code>index.html</code> for the report figures and storyboards.</li>
+    <li><strong>Planned / undecided:</strong> Specific language model provider for future reason-text generation (none integrated yet).</li>
+  </ul>
+</section>
+
+<section id="running-or-inspecting-the-work">
+  <h2>6. Running or inspecting the work</h2>
+  <p>No installation, server, or build step is required. Open <code>index.html</code> directly in any modern web browser:</p>
+  <pre><code>open index.html</code></pre>
+  <ul>
+    <li><strong>Desktop view:</strong> All three phone versions (<strong>A. Stable</strong>, <strong>B. Automatic</strong>, <strong>C. Suggested</strong>) appear side by side below the comparison table, with observer panels underneath each phone.</li>
+    <li><strong>Narrow-screen view (<code>&lt;= 1099px</code>):</strong> Use the sticky <strong>A. Stable / B. Automatic / C. Suggested</strong> tabs at the top to switch between phones.</li>
+    <li><strong>Resetting:</strong> Click <strong>Restart all three</strong> in the header banner to clear all session logs, ratings, and tile positions.</li>
+  </ul>
+</section>
+
+<section id="development-record">
+  <h2>7. Development record</h2>
+  <p class="note">(Note: this folder is a standalone repository snapshot without local <code>.git</code> commit history; stages below trace the design evolution documented in <code>docs/report.md</code>.)</p>
+  <ul>
+    <li><strong>Stage 1 — Research framing:</strong> Defined the three-way comparison (Stable, Automatic, Suggested) from the Assignment 1 literature review gaps and Figure 1.</li>
+    <li><strong>Stage 2 — Early quiz prototype pivoted to home screen:</strong> Built an initial content-adaptive quiz, then set it aside because users found it harder to follow and it did not cleanly match Assignment 1's layout conditions; simplified to the 8-tile StudyHub home screen.</li>
+    <li><strong>Stage 3 — Version C control mechanisms:</strong> Added the suggestion card with plain-language explanation, <strong>Accept</strong> / <strong>Reject</strong> actions, <code>Moved</code> badge, and <strong>Changes to your layout</strong> <strong>Undo</strong> control.</li>
+    <li><strong>Stage 4 — Measurement &amp; logging:</strong> Added the 6-task sequence, wrong-tap detection, tipping-point marker, 1–5 predictability/control/trust ratings, and timestamped session record.</li>
+    <li><strong>Stage 5 — Clarity revisions from classmate feedback:</strong> Because classmates did not understand the initial home-screen version, added the 3-step welcome intro, task progress bar, plainer suggestion wording, top comparison table, side-by-side layout, and observer explanation boxes.</li>
+  </ul>
+</section>
+
+<section id="ai-assistance">
+  <h2>8. AI assistance</h2>
+  <p>Claude (Anthropic) was used as a drafting assistant for the prototype code, system diagram, storyboards, and report text. All research framing, interface decisions, classmate checks, and final verification were directed by Shravani Jagtap, and no API keys are used or stored in the project.</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Focus area</th>
+        <th>What AI was used for</th>
+        <th>Human direction and verification</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Concept &amp; literature mapping</strong></td>
+        <td>Structuring how Assignment 1 gaps map to prototype features</td>
+        <td>Verified each Assignment 1 gap (<code>[1]</code>–<code>[8]</code>, Figure 1) maps accurately to an implemented or planned StudyHub component.</td>
+      </tr>
+      <tr>
+        <td><strong>Interface prototype</strong></td>
+        <td>Drafting the initial quiz and the 3-phone <code>index.html</code> layout</td>
+        <td>Rejected the early adaptive quiz as confusing; directed the shift to three side-by-side home screens with app-style visual design.</td>
+      </tr>
+      <tr>
+        <td><strong>Clarity &amp; usability</strong></td>
+        <td>Revising copy, welcome intro, and observer panels</td>
+        <td>Responded to informal classmate confusion on the early home screen by requiring plainer wording, a comparison table, and live <em>"What just happened"</em> explanations.</td>
+      </tr>
+      <tr>
+        <td><strong>System diagram</strong></td>
+        <td>Drafting the end-to-end flowchart</td>
+        <td>Requested that all three conditions (A, B, C) and simulated vs. planned components be shown together after an earlier Version-C-only draft proved confusing.</td>
+      </tr>
+      <tr>
+        <td><strong>Project report</strong></td>
+        <td>Drafting prose and checking word counts</td>
+        <td>Edited wording, checked all 8 Assignment 1 and HCI citations, and ensured the 1,291-word report (<code>docs/report.md</code>) accurately reflects implemented vs. planned scope.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="additional-files">
+  <h2>9. Additional files</h2>
+  <ul>
+    <li><code>index.html</code> — Complete interactive StudyHub prototype (Versions A, B, and C).</li>
+    <li><code>README.html</code> — Standalone HTML version of <code>README.md</code>.</li>
+    <li><code>docs/report.md</code> — Markdown source of the Assignment 2 project report (1,291 words).</li>
+    <li><code>docs/Assignment2_Project_Report_FINAL.docx</code> &amp; <code>docs/Assignment2_Project_Report_FINAL.pdf</code> — Final formatted 10-page submission report with embedded system diagram, storyboards, and references.</li>
+    <li><code>docs/system_diagram.svg</code> &amp; <code>docs/system_diagram.png</code> — End-to-end system architecture and flow diagram.</li>
+    <li><code>screenshots/versions_at_a_glance.png</code> — Comparison table of Versions A, B, and C.</li>
+    <li><code>screenshots/three_versions_overview.png</code> — Capture of Version A with its header, phone frame, and observer panels.</li>
+    <li><code>screenshots/observer_view_B.png</code> — Supplemental background capture in the screenshots folder.</li>
+    <li><code>screenshots/storyboard_1_stable.png</code> — Storyboard 1: Version A welcome screen, Task 1, and Task 4 unchanged layout.</li>
+    <li><code>screenshots/storyboard_2_auto.png</code> — Storyboard 2: Version B Task 1, silent move of <code>Notes</code> to top before Task 4, and resulting wrong tap on <code>Timetable</code>.</li>
+    <li><code>screenshots/storyboard_3_suggested.png</code> — Storyboard 3: Version C suggestion card, post-Accept <code>Moved</code> state with <strong>Undo</strong>, post-Undo restored layout, and end-of-session 1–5 ratings.</li>
+  </ul>
+</section>
+</main>
+</body>
+</html>
